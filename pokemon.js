@@ -456,7 +456,7 @@ api.on('message', function(message) {
 	
 					dDistance = getDistance(message.location.latitude, message.location.longitude, row.latitude, row.longitude);
 					
-					console.log(dDistance,messageBodyObject,remainingtime);
+					console.log(dDistance,messageBodyObject);
 					
 					if (dDistance<row.radius && typeof messageBodyObject !== 'undefined'){
 						console.log('Sent to', message.chat.id, message.location.latitude, message.location.longitude, row.radius);
@@ -941,7 +941,7 @@ app.post('/', function(req, res) {
 									"OR ignore_flag = 0) "+
 									"AND active = 1";
 			
-			db.each(varDBSelectUsers,[req.body.message.pokemon_id], function(err, row) {
+			db.each(DBSelectUsers,[req.body.message.pokemon_id], function(err, row) {
 	
 				var messageBodyObject = prepareMessage(row.chat_id,req.body.message.pokemon_id,req.body.message.latitude,req.body.message.longitude,req.body.message.disappear_time,now);
 				
