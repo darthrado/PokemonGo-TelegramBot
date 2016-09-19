@@ -8,8 +8,13 @@ The bot listens for encounters provided by the map and uses the principle of a L
 (Credit where credit is due: https://github.com/danvoinea/PokeMapTelegram Used the following bot as a basis, but ended up completely redesigning it. My version is tuned to work for large cities with many encounters)
 
 Setting up:
+
 1. npm install
+
 2. Create a telegram bot via BotFather and place it's Token key in the config.ini
+
 3. Edit the config.ini to suit your needs
+
 4. Edit languages.json should you need additional localization
+
 5. run with "node pokemon" (Use "forever" (npm install forever -g) for permanent run)
