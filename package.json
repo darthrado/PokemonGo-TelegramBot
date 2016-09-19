@@ -1,0 +1,27 @@
+{
+  "name": "pogomTelegramBot",
+  "version": "0.0.1",
+  "description": "PokemonGo-Map Bot for Telegram",
+  "main": "pokemon.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darthrado/PokemonGo-TelegramBot.git"
+  },
+  "author": "Radoslav Yanev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/darthrado/PokemonGo-TelegramBot/issues"
+  },
+  "homepage": "https://github.com/darthrado/PokemonGo-TelegramBot/#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "fs": "0.0.2",
+    "telegram-bot-api": "^1.2.0",
+    "underscore": "^1.8.3"
+	"sqlite3": "^3.1.4"
+  }
+}
