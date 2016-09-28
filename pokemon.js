@@ -267,7 +267,7 @@ function disableMessageProcessing(chatid){
 	    api.sendMessage({
             chat_id: chatid,
             text: gDisableMessage
-        });
+        }).catch(function(e){ informRoot(chatid,e);});
 		
 		return true;
 	}
@@ -333,6 +333,15 @@ function printObjectProperties(Object){
 			console.log(key,Object[key]);
 		}
 	}
+
+}
+
+function informRoot(chat_id,exception){
+
+	api.sendMessage({
+        chat_id: gRootUserChatID,
+        text: "Error sending message to "+chat_id+ "\n"+exception
+    }).catch(function(e){ informRoot(chat_id,e);});
 
 }
 
@@ -428,7 +437,7 @@ api.on('message', function(message) {
         api.sendMessage({
             chat_id: message.chat.id,
             text: localStrings[users[message.chat.id]].lLocationRecorded
-        });
+        }).catch(function(e){ informRoot(message.chat.id,e);});
 		
 		console.log(message.location.latitude,message.location.longitude,message.chat.username);
 		
@@ -476,7 +485,7 @@ api.on('message', function(message) {
 							api.sendMessage({
 								chat_id: message.chat.id,
 								text: fullMessage
-							});
+							}).catch(function(e){ informRoot(message.chat.id,e);});
 						}
 					}
 				});
@@ -487,7 +496,7 @@ api.on('message', function(message) {
 
 	if(typeof message.text !== 'undefined' && message.text !== null){
 	
-	console.log(message.text, message.chat.username);
+	console.log(message.text, message.chat.username,message.chat.id);
 	
 	//Start the notifications and register the new user if he doesn't already exist in the DB
     if (message.text == '/start') {
@@ -499,7 +508,7 @@ api.on('message', function(message) {
 				api.sendMessage({
 					chat_id: message.chat.id,
 					text: localStrings[users[message.chat.id]].lNotificationsStart
-				});
+				}).catch(function(e){ informRoot(message.chat.id,e);});
 			}
 			else{
 				users[message.chat.id]=gDefaultLanguage;
@@ -510,7 +519,7 @@ api.on('message', function(message) {
 							localStrings[users[message.chat.id]].lRadius+': '+gDefaultLocation.radius+gUnitOfMeasurement+' \n'+localStrings[users[message.chat.id]].lCoordinates+': '+gDefaultLocation.latitude+' ,'+gDefaultLocation.longitude+' \n'+
 							localStrings[users[message.chat.id]].lMapsLink+': '+gMapsUrl+gDefaultLocation.latitude+','+gDefaultLocation.longitude+' \n'+
 							localStrings[users[message.chat.id]].lForMoreInfo+' /help'
-				});
+				}).catch(function(e){ informRoot(message.chat.id,e);});
 			}
 		});
 	
@@ -520,7 +529,7 @@ api.on('message', function(message) {
         api.sendMessage({
             chat_id: message.chat.id,
             text: localStrings[users[message.chat.id]].lNotificationStrop
-        });
+        }).catch(function(e){ informRoot(message.chat.id,e);});
         db.run('UPDATE users SET active = 0 WHERE chat_id = ?',[message.chat.id]);
     }
 
@@ -544,7 +553,7 @@ api.on('message', function(message) {
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: 'Ignores '+ignoreResult.status.toLowerCase()+'d'
-			});
+			}).catch(function(e){ informRoot(message.chat.id,e);});
 			
 			return;
 			
@@ -554,7 +563,7 @@ api.on('message', function(message) {
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: ignoreResult.errorMessage
-			});
+			}).catch(function(e){ informRoot(message.chat.id,e);});
 			return;
 		}
 		
@@ -574,13 +583,13 @@ api.on('message', function(message) {
 				api.sendMessage({
 					chat_id: message.chat.id,
 					text: localStrings[users[message.chat.id]].lIgnored+": "+ignoreResult.returnString
-				});
+				}).catch(function(e){ informRoot(message.chat.id,e);});
 			}
 			else{
 				api.sendMessage({
 					chat_id: message.chat.id,
 					text: localStrings[users[message.chat.id]].lErrorIncorrectNameOrExists
-				});
+				}).catch(function(e){ informRoot(message.chat.id,e);});
 			}
 		});
 		
@@ -595,7 +604,7 @@ api.on('message', function(message) {
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: unIgnoreResult.errorMessage
-			});
+			}).catch(function(e){ informRoot(message.chat.id,e);});
 			return;
 		}
 		
@@ -604,13 +613,13 @@ api.on('message', function(message) {
 				api.sendMessage({
 					chat_id: message.chat.id,
 					text: localStrings[users[message.chat.id]].IUnignored+": "+unIgnoreResult.returnString
-				});
+				}).catch(function(e){ informRoot(message.chat.id,e);});
 			}
 			else{
 				api.sendMessage({
 					chat_id: message.chat.id,
 					text: localStrings[users[message.chat.id]].lErrorIncorrectNameOrNotExists
-				});
+				}).catch(function(e){ informRoot(message.chat.id,e);});
 			}
 		});
     }
@@ -660,13 +669,13 @@ api.on('message', function(message) {
 				api.sendMessage({
 					chat_id: message.chat.id,
 					text: finalMessage
-				});
+				}).catch(function(e){ informRoot(message.chat.id,e);});
 			}
 			else{
 				api.sendMessage({
 					chat_id: message.chat.id,
 					text: localStrings[users[message.chat.id]].lListEmpty
-				});
+				}).catch(function(e){ informRoot(message.chat.id,e);});
 			}
 		});
     }
@@ -693,7 +702,7 @@ api.on('message', function(message) {
         api.sendMessage({
             chat_id: message.chat.id,
             text: helptext
-        });
+        }).catch(function(e){ informRoot(message.chat.id,e);});
     }
 	
 	//Sets the radius to an appropriate number
@@ -706,7 +715,7 @@ api.on('message', function(message) {
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: localStrings[users[message.chat.id]].lIncorrectValue+': '+rad
-			});
+			}).catch(function(e){ informRoot(message.chat.id,e);});
 			
 
 		}
@@ -716,7 +725,7 @@ api.on('message', function(message) {
 				api.sendMessage({
 					chat_id: message.chat.id,
 					text: localStrings[users[message.chat.id]].lRadCantBeNegative
-				});
+				}).catch(function(e){ informRoot(message.chat.id,e);});
 				return;
 			}
 		
@@ -724,7 +733,7 @@ api.on('message', function(message) {
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: localStrings[users[message.chat.id]].lNewRadius+': ' + rad
-			});
+			}).catch(function(e){ informRoot(message.chat.id,e);});
 		
 		}
 	}
@@ -734,7 +743,7 @@ api.on('message', function(message) {
 		api.sendMessage({
             chat_id: message.chat.id,
             text: localStrings[users[message.chat.id]].lKnownBug1
-        });
+        }).catch(function(e){ informRoot(message.chat.id,e);});
 	}
 	
 	//Sends a TelegramAPI Location based on a Pokemon Encounter Message
@@ -744,7 +753,7 @@ api.on('message', function(message) {
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: localStrings[users[message.chat.id]].lUseOnyInReply
-			});
+			}).catch(function(e){ informRoot(message.chat.id,e);});
 			return;
 		}
 		
@@ -752,7 +761,7 @@ api.on('message', function(message) {
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: localStrings[users[message.chat.id]].lNoGmapsLink
-			});
+			}).catch(function(e){ informRoot(message.chat.id,e);});
 			return;
 		}
 		
@@ -791,7 +800,7 @@ api.on('message', function(message) {
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: buildMessage
-			});
+			}).catch(function(e){ informRoot(message.chat.id,exception);});
 		});
 	}
 	
@@ -814,14 +823,14 @@ api.on('message', function(message) {
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: localStrings[users[message.chat.id]].lModeSet+': '+venueFlagOpt[venueFlag]
-			});
+			}).catch(function(e){ informRoot(message.chat.id,e);});
 		
 		}
 		else{
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: localStrings[users[message.chat.id]].lModeNoExist
-			});
+			}).catch(function(e){ informRoot(message.chat.id,e);});
 		}
 		
 		
@@ -837,13 +846,13 @@ api.on('message', function(message) {
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: localStrings[users[message.chat.id]].lLanguage
-			});
+			}).catch(function(e){ informRoot(message.chat.id,e);});
 		}
 		else{
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: localStrings[users[message.chat.id]].lLanguageNotAvail
-			});
+			}).catch(function(e){ informRoot(message.chat.id,e);});
 		}
 		
 	}
@@ -862,7 +871,7 @@ api.on('message', function(message) {
 			api.sendMessage({
 				chat_id: row.chat_id,
 				text: sendMessage
-			});
+			}).catch(function(e){ informRoot(row.chat_id,e);});
 		});
 	}
 	//RootUsersOnly: Remotely executes a select directly in the DB
@@ -890,7 +899,7 @@ api.on('message', function(message) {
 			api.sendMessage({
 				chat_id: message.chat.id,
 				text: returnMessage
-			});
+			}).catch(function(e){ informRoot(message.chat.id,e);});;
 		
 		});
 	
@@ -964,7 +973,7 @@ app.post('/', function(req, res) {
 						api.sendMessage({
 							chat_id: row.chat_id,
 							text: dDistance+gUnitOfMeasurement+' '+messageBodyObject.text
-						});
+						}).catch(function(e){ informRoot(row.chat_id,e);});
 					}
 				}
 			});
